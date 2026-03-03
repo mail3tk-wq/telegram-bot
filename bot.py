@@ -23,6 +23,7 @@ CURRENCY = "UAH"
 
 # ====== CREATE PAYMENT ======
 def create_payment(user_id):
+
     order_reference = str(user_id)
     order_date = str(int(datetime.now().timestamp()))
 
@@ -60,15 +61,15 @@ def create_payment(user_id):
     }
 
     response = requests.post(
-    "https://api.wayforpay.com/api",
-    json=payload
-)
+        "https://api.wayforpay.com/api",
+        json=payload
+    )
 
-print("WAYFORPAY RESPONSE:", response.text)
+    print("WAYFORPAY RESPONSE:", response.text)
 
-data = response.json()
+    data = response.json()
 
-return data.get("invoiceUrl")
+    return data.get("invoiceUrl")
 # ====== START ======
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -136,4 +137,5 @@ def run_bot():
 if __name__ == "__main__":
     Thread(target=run_bot).start()
     app.run(host="0.0.0.0", port=5000)
+
 
