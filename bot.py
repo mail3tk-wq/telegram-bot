@@ -102,7 +102,6 @@ def start(message):
 🫰Готова відкрити першу кімнату? Натискай нижче та почни свою стильну трансформацію зараз!""",
         reply_markup=markup
     )
-
 # ====== WEBHOOK ======
 @app.route("/wayforpay", methods=["POST"])
 def wayforpay_webhook():
@@ -137,5 +136,6 @@ def run_bot():
 if __name__ == "__main__":
     Thread(target=run_bot).start()
     app.run(host="0.0.0.0", port=5000)
+
 
 
