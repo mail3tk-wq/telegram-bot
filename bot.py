@@ -5,8 +5,8 @@ import requests
 from flask import Flask, request
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from threading import Thread
 from datetime import datetime
+from threading import Thread
 
 # ====== ENV ======
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -23,7 +23,6 @@ CURRENCY = "UAH"
 
 # ====== CREATE PAYMENT ======
 def create_payment(user_id):
-
     order_reference = str(user_id)
     order_date = str(int(datetime.now().timestamp()))
 
@@ -67,13 +66,23 @@ def create_payment(user_id):
 
     return response.get("invoiceUrl")
 
-
 # ====== START ======
 @bot.message_handler(commands=['start'])
 def start(message):
+    user_id = message.from_user.id
+    payment_url = create_payment(user_id)
+
+    if not payment_url:
+        bot.send_message(message.chat.id, "Помилка створення платежу 😢")
+        return
+
     markup = InlineKeyboardMarkup()
-    buy_button = InlineKeyboardButton("💳 Придбати за 99 грн", url="https://example.com")
-    markup.add(buy_button)
+    markup.add(
+        InlineKeyboardButton(
+            "💳 Придбати за 99 грн",
+            url=payment_url
+        )
+    )
 
     bot.send_message(
         message.chat.id,
@@ -90,12 +99,16 @@ def start(message):
         reply_markup=markup
     )
 
-
 # ====== WEBHOOK ======
 @app.route("/wayforpay", methods=["POST"])
 def wayforpay_webhook():
 
-    data = request.json
+    data = request.get_json(force=True, silent=True)
+
+    if not data:
+        data = request.form.to_dict()
+
+    print("WAYFORPAY DATA:", data)
 
     if data.get("transactionStatus") == "Approved":
 
@@ -113,8 +126,10 @@ def wayforpay_webhook():
 
     return "OK", 200
 
+# ====== RUN BOTH ======
+def run_bot():
+    bot.infinity_polling()
 
-# ====== RUN ======
 if __name__ == "__main__":
+    Thread(target=run_bot).start()
     app.run(host="0.0.0.0", port=5000)
-
