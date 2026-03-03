@@ -113,8 +113,10 @@ def wayforpay_webhook():
 
     print("WAYFORPAY DATA:", data)
 
-    order_reference = data.get("orderReference")
-    user_id = int(order_reference.split("_")[0])
+    if data.get("transactionStatus") == "Approved":
+
+        order_reference = data.get("orderReference")
+        user_id = int(order_reference.split("_")[0])
 
         link = bot.create_chat_invite_link(
             chat_id=CHANNEL_ID,
@@ -139,6 +141,7 @@ def telegram_webhook():
 # ====== RUN SERVER ======
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
