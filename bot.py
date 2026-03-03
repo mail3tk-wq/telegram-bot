@@ -128,11 +128,20 @@ def wayforpay_webhook():
         )
 
     return "OK", 200
+# ====== TELEGRAM WEBHOOK ======
+@app.route(f"/{BOT_TOKEN}", methods=["POST"])
+def telegram_webhook():
+    json_str = request.get_data().decode("UTF-8")
+    update = telebot.types.Update.de_json(json_str)
+    bot.process_new_updates([update])
+    return "OK", 200
 
-# ====== RUN BOTH ======
+
+# ====== RUN SERVER ======
 if __name__ == "__main__":
     bot.remove_webhook()
-    bot.infinity_polling(skip_pending=True)
+    bot.set_webhook(url=f"{DOMAIN_NAME}/{BOT_TOKEN}")
+    app.run(host="0.0.0.0", port=5000)
 
 
 
