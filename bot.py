@@ -134,8 +134,9 @@ def run_bot():
     bot.infinity_polling()
 
 if __name__ == "__main__":
-    Thread(target=run_bot).start()
-    app.run(host="0.0.0.0", port=5000)
+    bot.remove_webhook()
+    bot.infinity_polling(skip_pending=True)
+
 
 
 
