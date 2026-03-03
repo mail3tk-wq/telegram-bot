@@ -24,7 +24,7 @@ CURRENCY = "UAH"
 # ====== CREATE PAYMENT ======
 def create_payment(user_id):
 
-    order_reference = str(user_id)
+    order_reference = f"{user_id}_{int(datetime.now().timestamp())}"
     order_date = str(int(datetime.now().timestamp()))
 
     sign_string = ";".join([
@@ -113,9 +113,8 @@ def wayforpay_webhook():
 
     print("WAYFORPAY DATA:", data)
 
-    if data.get("transactionStatus") == "Approved":
-
-        user_id = int(data.get("orderReference"))
+    order_reference = data.get("orderReference")
+    user_id = int(order_reference.split("_")[0])
 
         link = bot.create_chat_invite_link(
             chat_id=CHANNEL_ID,
@@ -140,6 +139,7 @@ def telegram_webhook():
 # ====== RUN SERVER ======
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
