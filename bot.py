@@ -7,7 +7,7 @@ import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from datetime import datetime
 from threading import Thread
-
+import uuid
 # ====== ENV ======
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
@@ -24,7 +24,7 @@ CURRENCY = "UAH"
 # ====== CREATE PAYMENT ======
 def create_payment(user_id):
 
-    order_reference = f"{user_id}_{int(datetime.now().timestamp())}"
+    order_reference = f"{user_id}_{uuid.uuid4().hex}"
     order_date = str(int(datetime.now().timestamp()))
 
     sign_string = ";".join([
@@ -139,6 +139,7 @@ def telegram_webhook():
 # ====== RUN SERVER ======
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
