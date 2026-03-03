@@ -14,7 +14,7 @@ CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 MERCHANT_ACCOUNT = os.getenv("MERCHANT_ACCOUNT")
 MERCHANT_SECRET = os.getenv("MERCHANT_SECRET")
 DOMAIN_NAME = os.getenv("DOMAIN_NAME")
-
+print("BOT_TOKEN =", BOT_TOKEN)
 bot = telebot.TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
@@ -140,6 +140,7 @@ def telegram_webhook():
 # ====== RUN SERVER ======
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
 
 
 
