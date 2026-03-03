@@ -139,8 +139,6 @@ def telegram_webhook():
 
 # ====== RUN SERVER ======
 if __name__ == "__main__":
-    bot.remove_webhook()
-    bot.set_webhook(url=f"{DOMAIN_NAME}/{BOT_TOKEN}")
     app.run(host="0.0.0.0", port=5000)
 
 
