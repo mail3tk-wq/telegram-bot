@@ -71,16 +71,9 @@ def create_payment(user_id):
 # ====== START ======
 @bot.message_handler(commands=['start'])
 def start(message):
-    user_id = message.from_user.id
-
-    payment_url = create_payment(user_id)
-
-    if not payment_url:
-        bot.send_message(message.chat.id, "Помилка створення платежу 😢")
-        return
-
     markup = InlineKeyboardMarkup()
-    markup.add(InlineKeyboardButton("💳 Придбати за 99 грн", url=payment_url))
+    buy_button = InlineKeyboardButton("💳 Придбати за 99 грн", url="https://example.com")
+    markup.add(buy_button)
 
     bot.send_message(
         message.chat.id,
@@ -93,7 +86,7 @@ def start(message):
  • маленькі трюки для щоденного образу
  • фінальний чек-лист + персональна пропозиція на жакет бренду 💎
 
-🫰Готова відкрити першу кімнату? Натискай нижче та почни свою стильну трансформацію зараз!"""
+🫰Готова відкрити першу кімнату? Натискай нижче та почни свою стильну трансформацію зараз!""",
         reply_markup=markup
     )
 
@@ -124,3 +117,4 @@ def wayforpay_webhook():
 # ====== RUN ======
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
+
